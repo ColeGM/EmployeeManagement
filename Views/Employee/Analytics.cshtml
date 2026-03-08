@@ -1,0 +1,17 @@
+@model IEnumerable<EmployeeManagement.Models.Employee>
+<div class="container mt-5">
+    <h2 class="text-primary fw-bold">Department Insights</h2>
+    <div class="row mt-4">
+        @foreach (var group in Model.GroupBy(e => e.Department)) {
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-lg border-0 bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">@group.Key</h5>
+                        <p class="card-text display-6">@group.Count() Staff</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Back to Directory</a>
+</div>

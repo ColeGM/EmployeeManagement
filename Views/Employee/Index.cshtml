@@ -1,0 +1,51 @@
+@model IEnumerable<EmployeeManagement.Models.Employee>
+@{ ViewData["Title"] = "Executive Ledger"; }
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small opacity-75">Total Annual Payroll</h6>
+                    <h2 class="fw-bold">@Model.Sum(e => e.Salary).ToString("C0")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="neon-border-wrapper">
+        <div class="inner-content p-1">
+            <table class="table table-borderless text-body table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>UID</th><th>Name</th><th>Dept</th><th>Salary Rank</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>#@item.EmployeeID</td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td><span class="badge bg-secondary rounded-pill">@item.Department</span></td>
+                            <td>
+                                <div class="d-flex align-items-center" style="min-width: 150px;">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: @((item.Salary/120000)*100)%"></div>
+                                    </div>
+                                    <span class="small fw-bold">@item.Salary.ToString("C0")</span>
+                                </div>
+                            </td>
+                            <td>
+                                <form asp-action="Delete" asp-route-id="@item.EmployeeID" method="post" onsubmit="return confirm('Confirm termination of this record?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MOLA Enterprise</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <svg width="30" height="30" viewBox="0 0 100 100" class="me-2">
+                        <line x1="10" y1="90" x2="50" y2="10" stroke="currentColor" stroke-width="8" />
+                        <line x1="50" y1="10" x2="90" y2="90" stroke="currentColor" stroke-width="8" />
+                        <line x1="30" y1="50" x2="70" y2="50" stroke="currentColor" stroke-width="8" />
+                    </svg>
+                    <span class="fw-bold">MOLA<span class="text-primary">ERP</span></span>
+                </a>
+                
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-outline-secondary me-3" id="themeToggle">
+                        <i class="bi bi-circle-half"></i> Switch Theme
+                    </button>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index">Directory</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+        const btn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        btn.addEventListener('click', () => {
+            const current = html.getAttribute('data-bs-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', target);
+            localStorage.setItem('mola-theme', target);
+        });
+
+        // Maintain preference on reload
+        const saved = localStorage.getItem('mola-theme') || 'light';
+        html.setAttribute('data-bs-theme', saved);
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

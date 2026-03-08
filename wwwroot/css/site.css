@@ -1,0 +1,62 @@
+/* Global Theme Transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 1. Standard Light Mode Defaults */
+[data-bs-theme="light"] {
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --card-bg: #ffffff;
+}
+
+/* 2. Dark Mode Overrides - The "Invisibility" Fix */
+[data-bs-theme="dark"] {
+    --text-main: #f8f9fa; /* Off-white for readability */
+    --text-muted: #adb5bd;
+    --card-bg: #1e1e1e;
+}
+
+/* 3. Apply the variables to the UI */
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .table {
+    color: var(--text-main) !important;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] h1, [data-bs-theme="dark"] h2, 
+[data-bs-theme="dark"] h3, [data-bs-theme="dark"] .fw-bold {
+    color: #ffffff !important;
+}
+
+/* Neon Border Wrapper Adjustments */
+.neon-border-wrapper {
+    padding: 4px;
+    background: linear-gradient(45deg, #007bff, #6610f2, #6f42c1, #007bff);
+    background-size: 400% 400%;
+    border-radius: 12px;
+    animation: gradient-move 10s ease infinite;
+}
+
+@keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.inner-content {
+    background: white;
+    border-radius: 8px;
+}
+
+[data-bs-theme="dark"] .inner-content {
+    background: #1a1a1a; /* Dark background inside the neon border */
+}
