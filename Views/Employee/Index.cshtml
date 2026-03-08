@@ -2,12 +2,23 @@
 @{ ViewData["Title"] = "Executive Ledger"; }
 
 <div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card bg-dark text-white shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-uppercase small opacity-75">Total Annual Payroll</h6>
-                    <h2 class="fw-bold">@Model.Sum(e => e.Salary).ToString("C0")</h2>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="p-4 rounded-4 shadow-lg border-0" style="background: rgba(var(--bs-primary-rgb), 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="fw-bold mb-0">Staff Intel <span class="badge bg-primary fs-6">v2.0</span></h2>
+                        <p class="text-muted mb-0">Total Payroll: @Model.Sum(e => e.Salary).ToString("C0")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="Index" method="get" class="d-flex gap-2">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
+                                <input type="text" name="searchId" class="form-control bg-transparent border-start-0" placeholder="Fast Search by UID...">
+                            </div>
+                            <button type="submit" class="btn btn-primary px-4 rounded-3">Query</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -15,31 +26,32 @@
 
     <div class="neon-border-wrapper">
         <div class="inner-content p-1">
-            <table class="table table-borderless text-body table-hover mb-0">
-                <thead>
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th>UID</th><th>Name</th><th>Dept</th><th>Salary Rank</th><th>Actions</th>
+                        <th class="ps-4">UID</th><th>Name</th><th>Dept</th><th>Salary Visualization</th><th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model) {
                         <tr>
-                            <td>#@item.EmployeeID</td>
-                            <td class="fw-bold">@item.Name</td>
-                            <td><span class="badge bg-secondary rounded-pill">@item.Department</span></td>
+                            <td class="ps-4 text-muted small">#@item.EmployeeID</td>
+                            <td>
+                                <div class="fw-bold">@item.Name</div>
+                                <div class="small text-muted">@item.Position</div>
+                            </td>
+                            <td><span class="badge bg-info-subtle text-info-emphasis rounded-pill">@item.Department</span></td>
                             <td>
                                 <div class="d-flex align-items-center" style="min-width: 150px;">
-                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
-                                        <div class="progress-bar bg-success" style="width: @((item.Salary/120000)*100)%"></div>
+                                    <div class="progress flex-grow-1 me-2" style="height: 6px; background-color: rgba(0,0,0,0.05);">
+                                        <div class="progress-bar bg-primary" style="width: @((item.Salary/120000)*100)%"></div>
                                     </div>
-                                    <span class="small fw-bold">@item.Salary.ToString("C0")</span>
+                                    <span class="small fw-bold text-primary">@item.Salary.ToString("C0")</span>
                                 </div>
                             </td>
-                            <td>
-                                <form asp-action="Delete" asp-route-id="@item.EmployeeID" method="post" onsubmit="return confirm('Confirm termination of this record?');">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm border-0">
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
+                            <td class="text-end pe-4">
+                                <form asp-action="Delete" asp-route-id="@item.EmployeeID" method="post" onsubmit="return confirm('Terminate this record?');">
+                                    <button type="submit" class="btn btn-link text-danger p-0"><i class="bi bi-x-circle-fill fs-5"></i></button>
                                 </form>
                             </td>
                         </tr>
