@@ -1,17 +1,39 @@
 @model IEnumerable<EmployeeManagement.Models.Employee>
-<div class="container mt-5">
-    <h2 class="text-primary fw-bold">Department Insights</h2>
-    <div class="row mt-4">
-        @foreach (var group in Model.GroupBy(e => e.Department)) {
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-lg border-0 bg-dark text-white">
-                    <div class="card-body">
-                        <h5 class="card-title">@group.Key</h5>
-                        <p class="card-text display-6">@group.Count() Staff</p>
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Department Spending</h5>
+                    @foreach (var g in Model.GroupBy(e => e.Department)) {
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small fw-bold">
+                                <span>@g.Key</span>
+                                <span>@g.Sum(e => e.Salary).ToString("C0")</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: @(g.Count() * 10)%"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100 bg-dark text-white">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3 text-info">Recent Admin Activity</h5>
+                    <div class="list-group list-group-flush small">
+                        @foreach (var log in ViewBag.Logs) {
+                            <div class="list-group-item bg-transparent text-white-50 border-secondary">
+                                <i class="bi bi-clock-history me-2"></i> @log
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
-        }
+        </div>
     </div>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Back to Directory</a>
+    <a asp-action="Index" class="btn btn-secondary mt-4">Back to Dashboard</a>
 </div>
