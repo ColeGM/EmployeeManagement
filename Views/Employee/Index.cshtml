@@ -1,71 +1,49 @@
 @model IEnumerable<EmployeeManagement.Models.Employee>
 @using System.Globalization
-@{ 
-    ViewData["Title"] = "Executive Ledger";
-    var usCulture = new CultureInfo("en-US");
-}
+@{ var us = new CultureInfo("en-US"); }
 
-<div class="container-fluid py-4">
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="p-4 rounded-4 shadow-lg border-0" style="background: rgba(var(--bs-primary-rgb), 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h2 class="fw-bold mb-0 text-body">Staff Intel <span class="badge bg-primary fs-6">v2.1</span></h2>
-                        <p class="text-muted mb-0">Total Payroll: @Model.Sum(e => e.Salary).ToString("C0", usCulture)</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                         <form asp-action="Index" method="get" class="d-flex gap-2">
-                            <input type="text" name="searchId" class="form-control bg-transparent" placeholder="Search ID...">
-                            <button type="submit" class="btn btn-primary px-4">Query</button>
-                        </form>
-                    </div>
+<div class="container py-4">
+    <div class="card border-0 shadow-sm mb-4 bg-body-tertiary">
+        <div class="card-body">
+            <h5 class="fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Hire New Talent</h5>
+            <form asp-action="Hire" method="post" class="row g-2">
+                <div class="col-md-3"><input name="Name" class="form-control form-control-sm" placeholder="Full Name" required></div>
+                <div class="col-md-2">
+                    <select name="Department" class="form-select form-select-sm">
+                        <option>IT</option><option>HR</option><option>Sales</option>
+                    </select>
                 </div>
-            </div>
+                <div class="col-md-3"><input name="Position" class="form-control form-control-sm" placeholder="Title (e.g. Developer)"></div>
+                <div class="col-md-2"><input name="Salary" type="number" class="form-control form-control-sm" placeholder="Salary"></div>
+                <div class="col-md-2"><button type="submit" class="btn btn-primary btn-sm w-100">Add to Ledger</button></div>
+            </form>
         </div>
     </div>
 
     <div class="neon-border-wrapper">
         <div class="inner-content p-1">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table align-middle mb-0">
                 <thead>
-                    <tr class="text-body">
-                        <th class="ps-4">UID</th><th>Name/Position</th><th>Department</th><th>Salary Rank</th><th class="text-end pe-4">Actions</th>
-                    </tr>
+                    <tr><th>Staff</th><th>Department</th><th>Salary</th><th class="text-end">Management Actions</th></tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model) {
-                        // Logic for Color Coding Departments
-                        string badgeClass = item.Department switch {
-                            "IT" => "bg-primary-subtle text-primary border border-primary",
-                            "HR" => "bg-warning-subtle text-warning-emphasis border border-warning",
-                            "Sales" => "bg-success-subtle text-success border border-success",
-                            _ => "bg-secondary-subtle text-secondary"
-                        };
-
                         <tr>
-                            <td class="ps-4 text-muted small">#@item.EmployeeID</td>
                             <td>
-                                <div class="fw-bold text-body">@item.Name</div>
+                                <div class="fw-bold">@item.Name</div>
                                 <div class="small text-muted">@item.Position</div>
                             </td>
-                            <td>
-                                <span class="badge rounded-pill @badgeClass">
-                                    @item.Department
-                                </span>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center" style="min-width: 150px;">
-                                    <div class="progress flex-grow-1 me-2" style="height: 8px; background-color: rgba(0,0,0,0.1);">
-                                        <div class="progress-bar bg-primary" style="width: @((item.Salary/120000)*100)%"></div>
-                                    </div>
-                                    <span class="small fw-bold text-success">@item.Salary.ToString("C0", usCulture)</span>
+                            <td><span class="badge rounded-pill bg-dark">@item.Department</span></td>
+                            <td class="fw-bold text-success">@item.Salary.ToString("C0", us)</td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <form asp-action="Promote" asp-route-id="@item.EmployeeID" method="post">
+                                        <button title="Promote" class="btn btn-sm btn-outline-success border-0"><i class="bi bi-graph-up-arrow"></i></button>
+                                    </form>
+                                    <form asp-action="Delete" asp-route-id="@item.EmployeeID" method="post" onsubmit="return confirm('Confirm Termination?');">
+                                        <button title="Terminate" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-fire"></i></button>
+                                    </form>
                                 </div>
-                            </td>
-                            <td class="text-end pe-4">
-                                <form asp-action="Delete" asp-route-id="@item.EmployeeID" method="post" onsubmit="return confirm('Terminate this record?');">
-                                    <button type="submit" class="btn btn-link text-danger p-0"><i class="bi bi-x-circle-fill fs-5"></i></button>
-                                </form>
                             </td>
                         </tr>
                     }
